@@ -1,1 +1,9 @@
-POST http://127.0.0.1:3000/events
+POST http://127.0.0.1:3000/events HTTP/1.1
+content-type: application/json
+
+{
+    "title": "teste api",
+    "details": "xama que eh nois",
+    "slug": "teste-api",
+    "maximum_attendees":13
+}
