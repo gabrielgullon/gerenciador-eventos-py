@@ -1,5 +1,7 @@
-from typing import Dict
+from typing import Dict, List
+from src.errors.error_types.http_conflict import HttpConflictError
 from src.models.entities.attendees import Attendees
+from src.models.entities.check_in import CheckIn
 from src.models.entities.events import Events
 from src.models.settings.connections import db_connection_handler
 from sqlalchemy.exc import IntegrityError
@@ -23,7 +25,7 @@ class AttendeesRepository:
                 return attendeeInfo
 
             except IntegrityError:
-                raise Exception("Participante já cadastrado")
+                raise HttpConflictError("Participante já cadastrado")
 
             except Exception as exc:
                 db.session.rollback()
@@ -41,6 +43,27 @@ class AttendeesRepository:
                 )
 
                 return attendee
+
+            except NoResultFound:
+                return None
+
+    def get_attendees_by_event_id(self, event_id: str) -> List[Attendees]:
+        with db_connection_handler as db:
+            try:
+                attendees = (
+                    db.session.query(Attendees)
+                    .outerjoin(CheckIn, CheckIn.attendeeId == Attendees.id)
+                    .filter(Attendees.event_id == event_id)
+                    .with_entities(
+                        Attendees.id,
+                        Attendees.name,
+                        Attendees.email,
+                        CheckIn.created_at.label("check_in_at"),
+                    )
+                    .all()
+                )
+
+                return attendees
 
             except NoResultFound:
                 return None

@@ -2,8 +2,30 @@ POST http://127.0.0.1:3000/events HTTP/1.1
 content-type: application/json
 
 {
-    "title": "teste api",
+    "title": "xama api",
     "details": "xama que eh nois",
-    "slug": "teste-api",
-    "maximum_attendees":13
+    "slug": "xama-api",
+    "maximum_attendees":33
 }
+
+###
+GET http://localhost:3000/events/1de9f82c-0607-4136-8271-8213a9c0b173
+
+
+###
+POST http://127.0.0.1:3000/events/1de9f82c-0607-4136-8271-8213a9c0b173/register HTTP/1.1
+content-type: application/json
+
+{
+    "name": "attendee",
+    "email": "att@email.com"
+}
+
+###
+GET http://localhost:3000/attendees/3f5cc9b1-49ba-499e-a7dd-c080b995ddf8/badge
+
+###
+GET http://localhost:3000/events/1de9f82c-0607-4136-8271-8213a9c0b173/attendees
+
+###
+POST http://localhost:3000/attendees/3f5cc9b1-49ba-499e-a7dd-c080b995ddf8/check-in
